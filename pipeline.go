@@ -1,6 +1,6 @@
 package pipeline
 
-import "context"
+import "golang.org/x/net/context"
 
 type pipeline struct {
 	steps []Step

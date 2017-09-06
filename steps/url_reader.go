@@ -2,9 +2,10 @@ package steps
 
 import (
 	"bytes"
-	"context"
 	"io"
 	"net/http"
+
+	"golang.org/x/net/context"
 
 	"github.com/pkg/errors"
 	"github.com/rai-project/pipeline"

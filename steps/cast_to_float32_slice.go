@@ -1,7 +1,7 @@
 package steps
 
 import (
-	"context"
+	"golang.org/x/net/context"
 
 	"github.com/pkg/errors"
 	"github.com/rai-project/pipeline"

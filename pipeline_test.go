@@ -1,7 +1,7 @@
 package pipeline
 
 import (
-	"context"
+	"golang.org/x/net/context"
 	"testing"
 
 	"github.com/pkg/errors"
