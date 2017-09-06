@@ -1,23 +1,23 @@
-package flow
+package pipeline
 
 import (
 	"context"
 	"io"
 )
 
-type Process interface {
-	New(ctx context.Context) (Process, error)
+type Step interface {
+	New(ctx context.Context) (Step, error)
 	Run(ctx context.Context, in <-chan interface{}) chan interface{}
 	io.Closer
 }
 
-type ProcessFunction func(ctx context.Context, in interface{}) interface{}
+type StepFunction func(ctx context.Context, in interface{}) interface{}
 
-func (p ProcessFunction) New(ctx context.Context) (Process, error) {
+func (p StepFunction) New(ctx context.Context) (Step, error) {
 	return p, nil
 }
 
-func (p ProcessFunction) Run(ctx context.Context, in <-chan interface{}) chan interface{} {
+func (p StepFunction) Run(ctx context.Context, in <-chan interface{}) chan interface{} {
 	out := make(chan interface{})
 	go func() {
 		defer close(out)
@@ -33,6 +33,6 @@ func (p ProcessFunction) Run(ctx context.Context, in <-chan interface{}) chan in
 	return out
 }
 
-func (p ProcessFunction) Close() error {
+func (p StepFunction) Close() error {
 	return nil
 }

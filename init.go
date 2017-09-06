@@ -1,4 +1,4 @@
-package flow
+package pipeline
 
 import (
 	"github.com/rai-project/config"
@@ -12,6 +12,6 @@ var (
 
 func init() {
 	config.AfterInit(func() {
-		log = logger.New().WithField("pkg", "flow")
+		log = logger.New().WithField("pkg", "pipeline")
 	})
 }

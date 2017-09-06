@@ -1,4 +1,4 @@
-package flow
+package pipeline
 
 import (
 	"strings"
@@ -8,32 +8,32 @@ import (
 	"golang.org/x/sync/syncmap"
 )
 
-var processes syncmap.Map
+var Stepes syncmap.Map
 
-func FromName(s string) (Process, error) {
+func FromName(s string) (Step, error) {
 	s = strings.ToLower(s)
-	val, ok := processes.Load(s)
+	val, ok := Stepes.Load(s)
 	if !ok {
-		log.WithField("process", s).
-			Warn("cannot find process")
-		return nil, errors.Errorf("cannot find process %v", s)
+		log.WithField("Step", s).
+			Warn("cannot find Step")
+		return nil, errors.Errorf("cannot find Step %v", s)
 	}
-	process, ok := val.(Process)
+	Step, ok := val.(Step)
 	if !ok {
-		log.WithField("process", s).
-			Warn("invalid process")
-		return nil, errors.Errorf("invalid process %v", s)
+		log.WithField("Step", s).
+			Warn("invalid Step")
+		return nil, errors.Errorf("invalid Step %v", s)
 	}
-	return process, nil
+	return Step, nil
 }
 
-func Register(name string, s Process) {
-	processes.Store(strings.ToLower(name), s)
+func Register(name string, s Step) {
+	Stepes.Store(strings.ToLower(name), s)
 }
 
-func Processes() []string {
+func Stepes() []string {
 	names := []string{}
-	processes.Range(func(key, _ interface{}) bool {
+	Stepes.Range(func(key, _ interface{}) bool {
 		if name, ok := key.(string); ok {
 			names = append(names, name)
 		}
