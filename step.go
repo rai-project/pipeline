@@ -1,8 +1,9 @@
 package pipeline
 
 import (
-	"golang.org/x/net/context"
 	"io"
+
+	"golang.org/x/net/context"
 )
 
 type Step interface {

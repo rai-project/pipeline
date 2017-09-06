@@ -31,3 +31,10 @@ func (p *pipeline) Run(ctx context.Context, in <-chan interface{}) chan interfac
 	}
 	return out
 }
+
+func (p *pipeline) Close() error {
+	for _, step := range p.steps {
+		step.Close()
+	}
+	return nil
+}

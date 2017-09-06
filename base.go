@@ -1,4 +1,4 @@
-package steps
+package pipeline
 
 import (
 	"golang.org/x/net/context"
@@ -6,13 +6,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-type base struct{}
+type BaseStep struct{}
 
-func (p base) do(ctx context.Context, in0 interface{}) interface{} {
+func (p BaseStep) do(ctx context.Context, in0 interface{}) interface{} {
 	return errors.New("the base step is not implemented")
 }
 
-func (p base) Run(ctx context.Context, in <-chan interface{}, out chan interface{}) {
+func (p BaseStep) Run(ctx context.Context, in <-chan interface{}, out chan interface{}) {
 	go func() {
 		defer close(out)
 		for {

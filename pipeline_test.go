@@ -1,8 +1,9 @@
 package pipeline
 
 import (
-	"golang.org/x/net/context"
 	"testing"
+
+	"golang.org/x/net/context"
 
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
@@ -31,10 +32,10 @@ func TestPipeline(t *testing.T) {
 
 	input := make(chan interface{})
 	go func() {
+		defer close(input)
 		for ii := 0; ii < 3; ii++ {
 			input <- ii
 		}
-		close(input)
 	}()
 
 	outputs := pipe.Run(ctx, input)
