@@ -37,9 +37,6 @@ func (p urlReader) do(ctx context.Context, in0 interface{}) interface{} {
 		return err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return errors.Errorf("bad response code: %d", resp.StatusCode)
-	}
 	if resp.StatusCode != 200 {
 		return errors.Errorf("bad response code: %d", resp.StatusCode)
 	}
