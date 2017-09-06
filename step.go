@@ -6,8 +6,9 @@ import (
 )
 
 type Step interface {
+	Info() string
 	New(ctx context.Context) (Step, error)
-	Run(ctx context.Context, in <-chan interface{}) chan interface{}
+	Run(ctx context.Context, in <-chan interface{}, out chan interface{})
 	io.Closer
 }
 
@@ -17,20 +18,32 @@ func (p StepFunction) New(ctx context.Context) (Step, error) {
 	return p, nil
 }
 
-func (p StepFunction) Run(ctx context.Context, in <-chan interface{}) chan interface{} {
-	out := make(chan interface{})
+func (p StepFunction) Info() string {
+	return "StepFunction"
+}
+
+func (p StepFunction) Run(ctx context.Context, in <-chan interface{}, out chan interface{}) {
 	go func() {
 		defer close(out)
 		for {
 			select {
 			case <-ctx.Done():
+				// if err := ctx.Err(); err != nil {
+				// 	out <- err
+				// }
 				return
-			case input := <-in:
+			case input, open := <-in:
+				if !open {
+					return
+				}
+				if err, ok := input.(error); ok {
+					out <- err
+					continue
+				}
 				out <- p(ctx, input)
 			}
 		}
 	}()
-	return out
 }
 
 func (p StepFunction) Close() error {

@@ -8,11 +8,11 @@ import (
 	"golang.org/x/sync/syncmap"
 )
 
-var Stepes syncmap.Map
+var steps syncmap.Map
 
 func FromName(s string) (Step, error) {
 	s = strings.ToLower(s)
-	val, ok := Stepes.Load(s)
+	val, ok := steps.Load(s)
 	if !ok {
 		log.WithField("Step", s).
 			Warn("cannot find Step")
@@ -27,13 +27,13 @@ func FromName(s string) (Step, error) {
 	return Step, nil
 }
 
-func Register(name string, s Step) {
-	Stepes.Store(strings.ToLower(name), s)
+func Register(s Step) {
+	steps.Store(strings.ToLower(s.Info()), s)
 }
 
-func Stepes() []string {
+func Steps() []string {
 	names := []string{}
-	Stepes.Range(func(key, _ interface{}) bool {
+	steps.Range(func(key, _ interface{}) bool {
 		if name, ok := key.(string); ok {
 			names = append(names, name)
 		}

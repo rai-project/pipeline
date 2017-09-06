@@ -11,6 +11,7 @@ import (
 )
 
 type urlReader struct {
+	base
 }
 
 func NewURLReader(ctx context.Context) (pipeline.Step, error) {
@@ -20,6 +21,10 @@ func NewURLReader(ctx context.Context) (pipeline.Step, error) {
 
 func (p urlReader) New(ctx context.Context) (pipeline.Step, error) {
 	return p, nil
+}
+
+func (p urlReader) Info() string {
+	return "URLReader"
 }
 
 func (p urlReader) do(ctx context.Context, in0 interface{}) interface{} {
@@ -47,26 +52,10 @@ func (p urlReader) do(ctx context.Context, in0 interface{}) interface{} {
 	return res
 }
 
-func (p urlReader) Run(ctx context.Context, in <-chan interface{}) chan interface{} {
-	out := make(chan interface{})
-	go func() {
-		defer close(out)
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case input := <-in:
-				out <- p.do(ctx, input)
-			}
-		}
-	}()
-	return out
-}
-
 func (p urlReader) Close() error {
 	return nil
 }
 
 func init() {
-	pipeline.Register("URLReader", urlReader{})
+	pipeline.Register(urlReader{})
 }

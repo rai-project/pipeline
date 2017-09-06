@@ -8,6 +8,7 @@ import (
 )
 
 type castToFloat32Slice struct {
+	base
 }
 
 func NewCastToFloat32Slice(ctx context.Context) (pipeline.Step, error) {
@@ -17,6 +18,10 @@ func NewCastToFloat32Slice(ctx context.Context) (pipeline.Step, error) {
 
 func (p castToFloat32Slice) New(ctx context.Context) (pipeline.Step, error) {
 	return p, nil
+}
+
+func (p castToFloat32Slice) Info() string {
+	return "CastToFloat32Slice"
 }
 
 func (p castToFloat32Slice) do(ctx context.Context, in0 interface{}) interface{} {
@@ -31,26 +36,10 @@ func (p castToFloat32Slice) do(ctx context.Context, in0 interface{}) interface{}
 	return res
 }
 
-func (p castToFloat32Slice) Run(ctx context.Context, in <-chan interface{}) chan interface{} {
-	out := make(chan interface{})
-	go func() {
-		defer close(out)
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			case input := <-in:
-				out <- p.do(ctx, input)
-			}
-		}
-	}()
-	return out
-}
-
 func (p castToFloat32Slice) Close() error {
 	return nil
 }
 
 func init() {
-	pipeline.Register("CastToFloat32Slice", castToFloat32Slice{})
+	pipeline.Register(castToFloat32Slice{})
 }
