@@ -33,7 +33,7 @@ func TestPipeline(t *testing.T) {
 	input := make(chan interface{})
 	go func() {
 		defer close(input)
-		for ii := 0; ii < 3; ii++ {
+		for ii := 0; ii < 10; ii++ {
 			input <- ii
 		}
 	}()

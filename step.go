@@ -8,16 +8,11 @@ import (
 
 type Step interface {
 	Info() string
-	New(ctx context.Context) (Step, error)
 	Run(ctx context.Context, in <-chan interface{}, out chan interface{})
 	io.Closer
 }
 
 type StepFunction func(ctx context.Context, in interface{}) interface{}
-
-func (p StepFunction) New(ctx context.Context) (Step, error) {
-	return p, nil
-}
 
 func (p StepFunction) Info() string {
 	return "StepFunction"
