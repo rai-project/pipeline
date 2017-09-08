@@ -22,11 +22,11 @@ func (p *pipeline) Step(ctx context.Context, s Step, in <-chan interface{}, out 
 	s.Run(ctx, in, out)
 }
 
-func (p *pipeline) Run(ctx context.Context, in <-chan interface{}) chan interface{} {
+func (p *pipeline) Run(in <-chan interface{}) chan interface{} {
 	var out chan interface{}
 	for _, step := range p.steps {
 		out = make(chan interface{})
-		step.Run(ctx, in, out)
+		step.Run(p.ctx, in, out)
 		in = out
 	}
 	return out
