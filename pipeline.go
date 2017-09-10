@@ -3,13 +3,17 @@ package pipeline
 import "golang.org/x/net/context"
 
 type pipeline struct {
-	steps []Step
-	ctx   context.Context
+	steps   []Step
+	options *Options
 }
 
-func New(ctx context.Context) *pipeline {
+func New(opts ...Option) *pipeline {
+	options := NewOptions()
+	for _, o := range opts {
+		o(options)
+	}
 	return &pipeline{
-		ctx: ctx,
+		options: options,
 	}
 }
 
@@ -24,9 +28,12 @@ func (p *pipeline) Step(ctx context.Context, s Step, in <-chan interface{}, out 
 
 func (p *pipeline) Run(in <-chan interface{}) chan interface{} {
 	var out chan interface{}
+
+	ctx := p.options.ctx
+	channelBuffer := p.options.channelBuffer
 	for _, step := range p.steps {
-		out = make(chan interface{})
-		step.Run(p.ctx, in, out)
+		out = make(chan interface{}, channelBuffer)
+		step.Run(ctx, in, out)
 		in = out
 	}
 	return out

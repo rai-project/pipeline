@@ -10,9 +10,8 @@ import (
 )
 
 func TestPipeline(t *testing.T) {
-	ctx := context.Background()
 
-	pipe := New(ctx).Then(
+	pipe := New().Then(
 		StepFunction(func(ctx context.Context, in0 interface{}) interface{} {
 			in, ok := in0.(int)
 			if !ok {
@@ -38,7 +37,7 @@ func TestPipeline(t *testing.T) {
 		}
 	}()
 
-	outputs := pipe.Run(ctx, input)
+	outputs := pipe.Run(input)
 
 	ii := 0
 	for output := range outputs {
