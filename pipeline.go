@@ -26,7 +26,7 @@ func (p *pipeline) Step(ctx context.Context, s Step, in <-chan interface{}, out 
 	s.Run(ctx, in, out)
 }
 
-func (p *pipeline) Run(in <-chan interface{}) chan interface{} {
+func (p *pipeline) Run(in <-chan interface{}) <-chan interface{} {
 	var out chan interface{}
 
 	ctx := p.options.ctx
