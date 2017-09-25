@@ -8,17 +8,18 @@ import (
 
 type Step interface {
 	Info() string
-	Run(ctx context.Context, in <-chan interface{}, out chan interface{})
+	Run(ctx context.Context, in <-chan interface{}, out chan interface{}, opts ...Option)
 	io.Closer
 }
 
-type StepFunction func(ctx context.Context, in interface{}) interface{}
+type StepFunction func(ctx context.Context, in interface{}, opts *Options) interface{}
 
 func (p StepFunction) Info() string {
 	return "StepFunction"
 }
 
-func (p StepFunction) Run(ctx context.Context, in <-chan interface{}, out chan interface{}) {
+func (p StepFunction) Run(ctx context.Context, in <-chan interface{}, out chan interface{}, opts ...Option) {
+	options := NewOptions(opts...)
 	go func() {
 		defer close(out)
 		for {
@@ -36,7 +37,7 @@ func (p StepFunction) Run(ctx context.Context, in <-chan interface{}, out chan i
 					out <- err
 					continue
 				}
-				out <- p(ctx, input)
+				out <- p(ctx, input, options)
 			}
 		}
 	}()

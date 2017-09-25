@@ -12,7 +12,7 @@ import (
 func TestPipeline(t *testing.T) {
 
 	pipe := New().Then(
-		StepFunction(func(ctx context.Context, in0 interface{}) interface{} {
+		StepFunction(func(ctx context.Context, in0 interface{}, _ *Options) interface{} {
 			in, ok := in0.(int)
 			if !ok {
 				return errors.Errorf("invalid value %v", in0)
@@ -20,7 +20,7 @@ func TestPipeline(t *testing.T) {
 			return in + 1
 		}),
 	).Then(
-		StepFunction(func(ctx context.Context, in0 interface{}) interface{} {
+		StepFunction(func(ctx context.Context, in0 interface{}, _ *Options) interface{} {
 			in, ok := in0.(int)
 			if !ok {
 				return errors.Errorf("invalid value %v", in0)

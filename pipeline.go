@@ -26,14 +26,14 @@ func (p *pipeline) Step(ctx context.Context, s Step, in <-chan interface{}, out 
 	s.Run(ctx, in, out)
 }
 
-func (p *pipeline) Run(in <-chan interface{}) <-chan interface{} {
+func (p *pipeline) Run(in <-chan interface{}, opts ...Option) <-chan interface{} {
 	var out chan interface{}
 
 	ctx := p.options.ctx
 	channelBuffer := p.options.channelBuffer
 	for _, step := range p.steps {
 		out = make(chan interface{}, channelBuffer)
-		step.Run(ctx, in, out)
+		step.Run(ctx, in, out, opts...)
 		in = out
 	}
 	return out
