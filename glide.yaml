@@ -4,9 +4,6 @@ import:
 - package: github.com/rai-project/logger
 - package: github.com/sirupsen/logrus
   version: ^1.0.0
-- package: golang.org/x/net
-  subpackages:
-  - context
 - package: github.com/pkg/errors
   version: ~0.8.0
 - package: github.com/stretchr/testify
