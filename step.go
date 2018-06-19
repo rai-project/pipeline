@@ -3,7 +3,7 @@ package pipeline
 import (
 	"io"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 type Step interface {

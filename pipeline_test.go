@@ -3,7 +3,7 @@ package pipeline
 import (
 	"testing"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
