@@ -25,9 +25,9 @@ func (p StepFunction) Run(ctx context.Context, in <-chan interface{}, out chan i
 		for {
 			select {
 			case <-ctx.Done():
-				// if err := ctx.Err(); err != nil {
-				// 	out <- err
-				// }
+				if err := ctx.Err(); err != nil {
+				 	out <- err
+				}
 				return
 			case input, open := <-in:
 				if !open {
